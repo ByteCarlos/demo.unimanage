@@ -1,0 +1,26 @@
+.main-container {
+    margin: 10% 0;
+    display: inline-flex;
+}
+.navbar {
+    background-color: #b5d6ff  !important;
+}
+
+.main-container span {
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 30px;
+    margin: 130px;
+    text-align: justify;
+    height: 100%;
+}
+
+.projects-container {
+    margin: 10% 20%;
+    text-align: center;
+}
+
+.project-header-buttons {
+    margin-bottom: 20px;
+    display: flex;
+    float: left;
+}

@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\Instructor;
+use App\Models\Project;
+use App\Models\Team;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
 class SiteController extends Controller
 {
     public function index() {
@@ -34,26 +36,20 @@ class SiteController extends Controller
         return view('sobre');
     }
 
-    public function store(Request $request) {
-        DB::table('project')->insert([[
-            'project_cod' => $request->project_cod,
-            'name' => $request->project_name,
-            'description' => $request->project_description,
-            'delivery_date' => $request->project_delivery_date
-        ],
-        ]);
-
-        $project = DB::table('project')
-            ->select('project.id')
-            ->where('project_cod', '=', $_POST['project_cod'])
-            ->get();
-
-        DB::table('team')->insert([[
-            'name' => $_POST['team_name'],
-            'orientador_fk' => $_POST['project_instructor'],
-            'project_fk' => $project->id
-        ],
-        ]);
-        return $this->projects();
+    public function store(Request $request): RedirectResponse
+    {
+        $project = new Project;
+        $project->project_cod = $request->project_cod;
+        $project->name = $request->project_name;
+        $project->description = $request->project_description;
+        $project->delivery_date = $request->project_delivery_date;
+        if($project->save()) {
+            $team = new Team;
+            $team->name = $request->team_name;
+            $team->orientador_fk = $request->project_instructor;
+            $team->project_fk = $project->id;
+        }
+ 
+        return redirect('/projetos');
     }
 }

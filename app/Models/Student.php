@@ -11,6 +11,8 @@ class Student extends Model
 
     protected $fillable = ['name', 'cpf', 'user_id', 'institution_id'];
 
+    protected $table = 'student';
+
     public function user()
     {
         return $this->belongsTo(User::class);

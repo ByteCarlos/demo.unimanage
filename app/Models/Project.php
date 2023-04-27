@@ -9,6 +9,8 @@ class Project extends Model
 {
     protected $fillable = ['project_cod', 'name', 'description', 'delivery_date'];
 
+    protected $table = 'project';
+
     public function team()
     {
         return $this->hasOne(Team::class, 'project_fk');

@@ -11,6 +11,8 @@ class Institution extends Model
 {
     use HasFactory;
 
+    protected $table = 'institution';
+
     protected $fillable = [
         'name',
         'address'

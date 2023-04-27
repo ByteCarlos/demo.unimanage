@@ -8,6 +8,8 @@ class Instructor extends Model
 {
     protected $fillable = ['name', 'cpf', 'user_fk', 'institution_fk'];
 
+    protected $table = 'instructor';
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_fk');

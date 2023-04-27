@@ -19,6 +19,8 @@ class Meeting extends Model
         'instructor_fk',
     ];
 
+    protected $table = 'meeting';
+
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_fk');

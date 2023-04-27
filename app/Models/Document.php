@@ -11,6 +11,8 @@ class Document extends Model
 
     protected $fillable = ['title', 'file', 'project_fk'];
 
+    protected $table = 'document';
+
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_fk');

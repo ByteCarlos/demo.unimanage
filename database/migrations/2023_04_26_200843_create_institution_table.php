@@ -1,11 +1,12 @@
 <?php
-// database/migrations/{timestamp}_create_users_table.php
+
+// database/migrations/{timestamp}_create_institutions_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateInstitutionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +15,10 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('institution', function (Blueprint $table) {
             $table->id();
-            $table->string('email', 200);
-            $table->string('username', 100);
-            $table->string('password', 100);
-            $table->string('role', 20);
+            $table->string('name', 200);
+            $table->string('address', 200);
             $table->timestamps();
         });
     }
@@ -31,8 +30,7 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('institution');
     }
 }
 
-?>

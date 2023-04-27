@@ -57,7 +57,7 @@
                     <tr>
                         <td>{{ $proj->project_cod }}</td>
                         <td>{{ $proj->name }}</td>
-                        <td>{{ $proj->team_name }}</td>
+                        <td>{{ $proj->team->name }}</td>
                         <td>{{ $proj->description }}</td>
                         <td>{{ date('d/m/Y', strtotime($proj->delivery_date)) }}</td>
                         <td>

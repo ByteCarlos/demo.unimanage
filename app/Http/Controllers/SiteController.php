@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Http\Controllers;
+
 use App\Http\Controllers\Controller;
 use App\Models\Instructor;
 use App\Models\Project;
@@ -13,19 +15,9 @@ class SiteController extends Controller
     }
 
     public function projects() {
-        $projects = DB::table('project')
-            ->select('project.id as id',
-                    'project.name as name', 
-                    'project.project_cod as project_cod', 
-                    'project.description as description', 
-                    'project.delivery_date as delivery_date', 
-                    'team.name as team_name')
-            ->join('team', 'project.id', '=', 'team.project_fk')
-            ->get();
-        $instructors = DB::table('instructor')
-                    ->select('*')
-                    ->get();
-        return view('projetos', ['projects' => $projects, 'instructors' => $instructors]);
+        $project = Project::all();
+        $instructor = Instructor::all();
+        return view('projetos', ['projects' => $project, 'instructors' => $instructor]);
     }
 
     public function events() {
@@ -48,8 +40,9 @@ class SiteController extends Controller
             $team->name = $request->team_name;
             $team->orientador_fk = $request->project_instructor;
             $team->project_fk = $project->id;
+            if($team->save()) {
+                return redirect('/projetos');
+            }
         }
- 
-        return redirect('/projetos');
     }
 }

@@ -9,8 +9,8 @@ class Project extends Model
 {
     protected $fillable = ['project_cod', 'name', 'description', 'delivery_date'];
 
-    public function teams()
+    public function team()
     {
-        return $this->hasMany(Team::class, 'project_fk');
+        return $this->hasOne(Team::class, 'project_fk');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Instructor;
 use App\Models\Project;
+use App\Models\Event;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,20 +16,22 @@ class SiteController extends Controller
     }
 
     public function projects() {
-        $project = Project::all();
+        $projects = Project::all();
         $instructor = Instructor::all();
-        return view('projetos', ['projects' => $project, 'instructors' => $instructor]);
+        return view('projetos', ['projects' => $projects, 'instructors' => $instructor]);
     }
 
     public function events() {
-        return view('eventos');
+        $events = Event::all();
+        $projects = Project::all();
+        return view('eventos', ['projects' => $projects, 'events' => $events]);
     }
 
     public function about() {
         return view('sobre');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function storeProject(Request $request): RedirectResponse
     {
         $project = new Project;
         $project->project_cod = $request->project_cod;
@@ -43,6 +46,18 @@ class SiteController extends Controller
             if($team->save()) {
                 return redirect('/projetos');
             }
+        }
+    }
+
+    public function storeEvent(Request $request): RedirectResponse
+    {
+        $event = new Event;
+        $event->date = $request->event_date;
+        $event->name = $request->event_name;
+        $event->location = $request->event_location;
+        $event->project_fk = $request->project_event;
+        if($event->save()) {
+            return redirect('/eventos');
         }
     }
 }

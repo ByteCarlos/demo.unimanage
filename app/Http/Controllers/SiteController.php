@@ -49,6 +49,34 @@ class SiteController extends Controller
         }
     }
 
+    public function edit($id)
+    {
+        $project = Project::findOrFail($id);
+        return response()->json($project);
+    }
+
+     public function updateProject(Request $request, $id)
+     {
+         $project = Project::find($id);
+ 
+         $project->project_cod = $request->input('project_cod');
+         $project->name = $request->input('project_name');
+         $project->description = $request->input('project_description');
+         $project->delivery_date = $request->input('project_delivery_date');
+        
+         $project->save();
+ 
+         return redirect()->route('projetos.index')->with('success', 'Projeto atualizado com sucesso!');
+     }
+
+    public function deleteProject($id)
+    {
+        $project = Project::find($id);
+        if($project->delete()) {
+            return redirect('/projetos')->with('success', 'Projeto excluído com sucesso!');;
+        }
+    }
+
     public function storeEvent(Request $request): RedirectResponse
     {
         $event = new Event;

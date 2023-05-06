@@ -61,19 +61,43 @@
                         <td>{{ $proj->description }}</td>
                         <td>{{ date('d/m/Y', strtotime($proj->delivery_date)) }}</td>
                         <td>
-                            <a href="/projetos/update&id={{ $proj->id }}">
-                                <button class="btn btn-primary">Editar</button>
-                            </a>
-                            <a href="/projetos/delete&id={{ $proj->id }}">
+                            <button class="btn btn-primary edit-project" data-id="{{ $proj->id }}" data-toggle="modal" data-target="#update-modal">Editar</button>
+                            <form action="{{ route('projetos.delete', ['id' => $proj->id]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
                                 <button class="btn btn-danger">Excluir</button>
-                            </a>
+                            </form>
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+   <!-- Carregando o jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.edit-project').on('click', function() {
+                console.log('click')
+                var projectId = $(this).data('id');
+                var url = '{{ route("projetos.edit", ":id") }}';
+                url = url.replace(':id', projectId);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('.edit-project-modal input[name="project_cod"]').val(data.project_cod);
+                        $('.edit-project-modal input[name="project_name"]').val(data.name);
+                        $('.edit-project-modal textarea[name="project_description"]').val(data.description);
+                        $('.edit-project-modal input[name="project_delivery_date"]').val(data.delivery_date);
+                        $('.edit-project-modal #update-modal form').attr('action', '{{ route("projetos.update", ":id") }}'.replace(':id', data.id));
+                    }
+                });
+            });
+        });
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
@@ -120,6 +144,45 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Criar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal edit-project-modal" tabindex="-1" role="dialog" id="update-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Projeto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('projetos.update', ['id' => $proj->id]) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Código</label>
+                        <input name="project_cod" type="text" class="form-control" aria-describedby="Nome" placeholder="Digite o Código do Projeto" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input name="project_name" type="text" class="form-control" aria-describedby="Nome" placeholder="Digite o Nome do Projeto" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição</label>
+                        <textarea name="project_description" class="form-control" id="project_description" placeholder="Escreva uma descrição para seu projeto"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label>Data de Entrega</label>
+                      <input name="project_delivery_date" id="delivery_date" type="date" class="form-control">
+                  </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 </div>
             </form>

@@ -49,7 +49,7 @@ class SiteController extends Controller
         }
     }
 
-    public function edit($id)
+    public function editProject($id)
     {
         $project = Project::findOrFail($id);
         return response()->json($project);
@@ -77,6 +77,7 @@ class SiteController extends Controller
         }
     }
 
+    // CRUD eventos
     public function storeEvent(Request $request): RedirectResponse
     {
         $event = new Event;
@@ -86,6 +87,34 @@ class SiteController extends Controller
         $event->project_fk = $request->project_event;
         if($event->save()) {
             return redirect('/eventos');
+        }
+    }
+
+    public function editEvent($id)
+    {
+        $event = Event::findOrFail($id);
+        return response()->json($event);
+    }
+
+     public function updateEvent(Request $request, $id)
+     {
+         $event = Event::find($id);
+ 
+         $event->name = $request->input('event_name');
+         $event->date = $request->input('event_date');
+         $event->location = $request->input('event_location');
+         $event->project_fk = $request->input('project_event');
+        
+         $event->save();
+ 
+         return redirect()->route('eventos.index')->with('success', 'Projeto atualizado com sucesso!');
+     }
+
+    public function deleteEvent($id)
+    {
+        $event = Event::find($id);
+        if($event->delete()) {
+            return redirect('/projetos')->with('success', 'Evento excluído com sucesso!');;
         }
     }
 }

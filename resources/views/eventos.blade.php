@@ -58,21 +58,44 @@
                         <td>{{ $event->name }}</td>
                         <td>{{ $event->location }}</td>
                         <td>{{ $event->project->name }}</td>
-                        <td>
-                            <a href="/eventos/update&id={{ $event->id }}">
-                                <button class="btn btn-primary">Editar</button>
-                            </a>
-                            <a href="/eventos/delete&id={{ $event->id }}">
+                        <td style="display: flex;justify-content: center;flex-direction: row;">
+                            <button class="btn btn-primary edit-event" data-id="{{ $event->id }}" data-toggle="modal" data-target="#update-modal" style="margin-right:10px;">Editar</button>
+                            <form action="{{ route('eventos.delete', ['id' => $event->id]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
                                 <button class="btn btn-danger">Excluir</button>
-                            </a>
+                            </form>
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
+    <!-- Carregando o jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.edit-event').on('click', function() {
+                console.log('click')
+                var eventId = $(this).data('id');
+                var url = '{{ route("eventos.edit", ":id") }}';
+                url = url.replace(':id', eventId);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('.edit-event-modal input[name="event_name"]').val(data.name);
+                        $('.edit-event-modal input[name="event_date"]').val(data.date);
+                        $('.edit-event-modal input[name="event_location"]').val(data.location);
+                        $('.edit-event-modal select[name="project_event"]').val(data.project_fk);
+                        $('.edit-event-modal #update-modal form').attr('action', '{{ route("eventos.update", ":id") }}'.replace(':id', data.id));
+                    }
+                });
+            });
+        });
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
@@ -114,6 +137,51 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Criar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal edit-event-modal" tabindex="-1" role="dialog" id="update-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Evento</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('eventos.update', ['id' => $event->id]) }}" method="POST">
+                @csrf   
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Data do Evento</label>
+                        <input name="event_date" id="event_date" type="date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input name="event_name" type="text" class="form-control" aria-describedby="event_name"
+                            placeholder="Digite o nome do evento" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Local</label>
+                        <input name="event_location" type="text" class="form-control" aria-describedby="event_location"
+                        placeholder="Digite o local do evento" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Projeto</label>
+                        <select name="project_event" class="form-control" id="project_event">
+                            @foreach ($projects as $project)
+                                <option value="{{ $project->id }}">{{ $project->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 </div>
             </form>

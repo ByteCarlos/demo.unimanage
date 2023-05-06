@@ -60,8 +60,8 @@
                         <td>{{ $proj->team->name }}</td>
                         <td>{{ $proj->description }}</td>
                         <td>{{ date('d/m/Y', strtotime($proj->delivery_date)) }}</td>
-                        <td>
-                            <button class="btn btn-primary edit-project" data-id="{{ $proj->id }}" data-toggle="modal" data-target="#update-modal">Editar</button>
+                        <td style="display: flex;justify-content: center;flex-direction: row;">
+                            <button class="btn btn-primary edit-project" data-id="{{ $proj->id }}" data-toggle="modal" data-target="#update-modal" style="margin-right:10px;">Editar</button>
                             <form action="{{ route('projetos.delete', ['id' => $proj->id]) }}" method="POST">
                                 @csrf
                                 @method('DELETE')

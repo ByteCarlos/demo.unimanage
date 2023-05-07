@@ -29,8 +29,8 @@
                     <li class="nav-item <?= $_SERVER['REQUEST_URI'] == '/eventos' ? 'active' : '' ?>">
                         <a class="nav-link" href="/eventos">Eventos</a>
                     </li>
-                    <li class="nav-item <?= $_SERVER['REQUEST_URI'] == '/sobre' ? 'active' : '' ?>">
-                        <a class="nav-link" href="/sobre">Sobre</a>
+                    <li class="nav-item <?= $_SERVER['REQUEST_URI'] == '/tarefas' ? 'active' : '' ?>">
+                        <a class="nav-link" href="/tarefas">Tarefas</a>
                     </li>
                 </ul>
             </div>

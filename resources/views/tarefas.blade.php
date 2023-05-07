@@ -39,30 +39,24 @@
 
     <div class="container projects-container">
         <div class="project-header-buttons">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#create-modal">Criar Projeto</button>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#create-modal">Criar Tarefa</button>
         </div>
         <table class="table table-bordered">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Código do projeto</th>
-                    <th scope="col">Nome do projeto</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Descrição</th>
-                    <th scope="col">Data de entrega</th>
+                    <th scope="col">Nome da Tarefa</th>
+                    <th scope="col">Projeto Vinculado</th>
                     <th scope="col">Ações</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($projects as $proj)
+                @foreach ($tasks as $task)
                     <tr>
-                        <td>{{ $proj->project_cod }}</td>
-                        <td>{{ $proj->name }}</td>
-                        <td>{{ $proj->team->name }}</td>
-                        <td>{{ $proj->description }}</td>
-                        <td>{{ date('d/m/Y', strtotime($proj->delivery_date)) }}</td>
+                        <td>{{ $task->name }}</td>
+                        <td>{{ $task->project->name }}</td>
                         <td style="display: flex;justify-content: center;flex-direction: row;">
-                            <button class="btn btn-primary edit-project" data-id="{{ $proj->id }}" data-toggle="modal" data-target="#update-modal" style="margin-right:10px;">Editar</button>
-                            <form action="{{ route('projetos.delete', ['id' => $proj->id]) }}" method="POST">
+                            <button class="btn btn-primary edit-task" data-id="{{ $task->id }}" data-toggle="modal" data-target="#update-modal" style="margin-right:10px;">Editar</button>
+                            <form action="{{ route('tarefas.delete', ['id' => $task->id]) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-danger">Excluir</button>
@@ -78,21 +72,19 @@
 
     <script>
         $(document).ready(function() {
-            $('.edit-project').on('click', function() {
+            $('.edit-task').on('click', function() {
                 console.log('click')
-                var projectId = $(this).data('id');
-                var url = '{{ route("projetos.edit", ":id") }}';
-                url = url.replace(':id', projectId);
+                var taskId = $(this).data('id');
+                var url = '{{ route("tarefas.edit", ":id") }}';
+                url = url.replace(':id', taskId);
                 $.ajax({
                     url: url,
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
-                        $('.edit-project-modal input[name="project_cod"]').val(data.project_cod);
-                        $('.edit-project-modal input[name="project_name"]').val(data.name);
-                        $('.edit-project-modal textarea[name="project_description"]').val(data.description);
-                        $('.edit-project-modal input[name="project_delivery_date"]').val(data.delivery_date);
-                        $('.edit-project-modal #update-modal form').attr('action', '{{ route("projetos.update", ":id") }}'.replace(':id', data.id));
+                        $('.edit-task-modal input[name="task_name"]').val(data.name);
+                        $('.edit-task-modal select[name="project_event"]').val(data.project_fk);
+                        $('.edit-task-modal #update-modal form').attr('action', '{{ route("tarefas.update", ":id") }}'.replace(':id', data.id));
                     }
                 });
             });
@@ -101,45 +93,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
+
 <div class="modal" tabindex="-1" role="dialog" id="create-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Criar Projeto</h5>
+                <h5 class="modal-title">Criar Tarefa</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="/projetos">
+            <form method="POST" action="/tarefas">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Código</label>
-                        <input name="project_cod" type="text" class="form-control" aria-describedby="Nome" placeholder="Digite o Código do Projeto" required>
-                    </div>
-                    <div class="form-group">
                         <label>Nome</label>
-                        <input name="project_name" type="text" class="form-control" aria-describedby="Nome" placeholder="Digite o Nome do Projeto" required>
+                        <input name="task_name" type="text" class="form-control" aria-describedby="task_name"
+                            placeholder="Digite o nome da tarefa" required>
                     </div>
                     <div class="form-group">
-                        <label>Descrição</label>
-                        <textarea name="project_description" class="form-control" id="project_description" placeholder="Escreva uma descrição para seu projeto"></textarea>
-                    </div>
-                    <div class="form-group">
-                      <label>Data de Entrega</label>
-                      <input name="project_delivery_date" id="delivery_date" type="date" class="form-control">
-                  </div>
-                    <div class="form-group">
-                      <label>Nome do Time</label>
-                      <input name="team_name" type="text" class="form-control" aria-describedby="team_name" placeholder="Digite o Nome do Time" required>
-                  </div>
-                    <div class="form-group">
-                      <label>Orientador</label>
-                      <select name="project_instructor" class="form-control" id="project_instructor">
-                        @foreach ($instructors as $instructor)
-                            <option value="{{$instructor->id}}">{{$instructor->name}}</option>
-                        @endforeach
-                      </select>
+                        <label>Projeto</label>
+                        <select name="project_task" class="form-control" id="project_task">
+                            @foreach ($projects as $project)
+                                <option value="{{ $project->id }}">{{ $project->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -151,34 +129,31 @@
     </div>
 </div>
 
-<div class="modal edit-project-modal" tabindex="-1" role="dialog" id="update-modal">
+<div class="modal edit-task-modal" tabindex="-1" role="dialog" id="update-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Editar Projeto</h5>
+                <h5 class="modal-title">Editar Tarefa</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('projetos.update', ['id' => $proj->id]) }}" method="POST">
-                @csrf
+            <form action="{{ route('tarefas.update', ['id' => $task->id]) }}" method="POST">
+                @csrf   
                 @method('PUT')
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>Código</label>
-                        <input name="project_cod" type="text" class="form-control" aria-describedby="Nome" placeholder="Digite o Código do Projeto" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Nome</label>
-                        <input name="project_name" type="text" class="form-control" aria-describedby="Nome" placeholder="Digite o Nome do Projeto" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Descrição</label>
-                        <textarea name="project_description" class="form-control" id="project_description" placeholder="Escreva uma descrição para seu projeto"></textarea>
-                    </div>
-                    <div class="form-group">
-                      <label>Data de Entrega</label>
-                      <input name="project_delivery_date" id="delivery_date" type="date" class="form-control">
+                  <div class="form-group">
+                      <label>Nome</label>
+                      <input name="task_name" type="text" class="form-control" aria-describedby="task_name"
+                          placeholder="Digite o nome da tarefa" required>
+                  </div>
+                  <div class="form-group">
+                      <label>Projeto</label>
+                      <select name="project_task" class="form-control" id="project_task">
+                          @foreach ($projects as $project)
+                              <option value="{{ $project->id }}">{{ $project->name }}</option>
+                          @endforeach
+                      </select>
                   </div>
                 </div>
                 <div class="modal-footer">

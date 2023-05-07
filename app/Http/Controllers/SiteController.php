@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Instructor;
 use App\Models\Project;
 use App\Models\Event;
+use App\Models\Task;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,16 +20,6 @@ class SiteController extends Controller
         $projects = Project::all();
         $instructor = Instructor::all();
         return view('projetos', ['projects' => $projects, 'instructors' => $instructor]);
-    }
-
-    public function events() {
-        $events = Event::all();
-        $projects = Project::all();
-        return view('eventos', ['projects' => $projects, 'events' => $events]);
-    }
-
-    public function about() {
-        return view('sobre');
     }
 
     public function storeProject(Request $request): RedirectResponse
@@ -78,6 +69,12 @@ class SiteController extends Controller
     }
 
     // CRUD eventos
+    public function events() {
+        $events = Event::all();
+        $projects = Project::all();
+        return view('eventos', ['projects' => $projects, 'events' => $events]);
+    }
+
     public function storeEvent(Request $request): RedirectResponse
     {
         $event = new Event;
@@ -115,6 +112,49 @@ class SiteController extends Controller
         $event = Event::find($id);
         if($event->delete()) {
             return redirect('/projetos')->with('success', 'Evento excluído com sucesso!');;
+        }
+    }
+
+    // CRUD Tarefas
+    public function tasks() {
+        $tasks = Task::all();
+        $projects = Project::all();
+        return view('tarefas', ['projects' => $projects, 'tasks' => $tasks]);
+    }
+
+    public function storeTask(Request $request): RedirectResponse
+    {
+        $task = new Task;
+        $task->name = $request->task_name;
+        $task->project_fk = $request->project_task;
+        if($task->save()) {
+            return redirect('/tarefas');
+        }
+    }
+
+    public function editTask($id)
+    {
+        $task = Task::findOrFail($id);
+        return response()->json($task);
+    }
+
+     public function updateTask(Request $request, $id)
+     {
+         $task = Task::find($id);
+ 
+         $task->name = $request->input('task_name');
+         $task->project_fk = $request->input('project_task');
+        
+         $task->save();
+ 
+         return redirect()->route('tarefas.index')->with('success', 'Tarefa atualizada com sucesso!');
+     }
+
+    public function deleteTask($id)
+    {
+        $task = Task::find($id);
+        if($task->delete()) {
+            return redirect('/tarefas')->with('success', 'Tarefa excluída com sucesso!');;
         }
     }
 }

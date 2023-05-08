@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Instructor;
 use App\Models\Project;
 use App\Models\Event;
+use App\Models\InstructorTeam;
 use App\Models\Task;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
@@ -16,6 +17,8 @@ class SiteController extends Controller
         return view('welcome');
     }
 
+
+    // CRUD projetos
     public function projects() {
         $projects = Project::all();
         $instructor = Instructor::all();
@@ -32,9 +35,14 @@ class SiteController extends Controller
         if($project->save()) {
             $team = new Team;
             $team->name = $request->team_name;
-            $team->orientador_fk = $request->project_instructor;
             $team->project_fk = $project->id;
             if($team->save()) {
+                foreach ($request->project_instructor as $r) {
+                    $instructor_team = new InstructorTeam;
+                    $instructor_team->team_fk = $team->id;
+                    $instructor_team->instructor_fk = $r;
+                    $instructor_team->save();
+                }
                 return redirect('/projetos');
             }
         }

@@ -100,6 +100,9 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
 </body>
 <div class="modal" tabindex="-1" role="dialog" id="create-modal">
     <div class="modal-dialog" role="document">
@@ -133,9 +136,9 @@
                       <label>Nome do Time</label>
                       <input name="team_name" type="text" class="form-control" aria-describedby="team_name" placeholder="Digite o Nome do Time" required>
                   </div>
-                    <div class="form-group">
+                    <div class="form-group" style="display: grid">
                       <label>Orientador</label>
-                      <select name="project_instructor" class="form-control" id="project_instructor">
+                      <select name="project_instructor[]" id="project_instructor" multiple class="form-control select2">
                         @foreach ($instructors as $instructor)
                             <option value="{{$instructor->id}}">{{$instructor->name}}</option>
                         @endforeach
@@ -189,5 +192,10 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+  $('.select2').select2();
+});
 
+</script>
 </html>

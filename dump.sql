@@ -1,3 +1,4 @@
+-- AS COLUNAS DE UPDATED_AT E CREATED_AT SÓ FORAM USADAS PORQUE SÃO COLUNAS OBRIGATÓRIAS PARA FAZER REQUISIÇÕES COM O FRAMEWORK LARAVEL
 CREATE DATABASE `demo_unimanage`;
 USE `demo_unimanage`;
 
@@ -78,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `task` (
     CONSTRAINT `project_fk_task` FOREIGN KEY (`project_fk`) REFERENCES `project` (`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `documents` (
+CREATE TABLE IF NOT EXISTS `document` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `title` varchar(200) NOT NULL,
     `file` varchar(200) NOT NULL,
@@ -86,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `documents` (
     `updated_at` timestamp NULL,
     `created_at` timestamp NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT `project_fk_documents` FOREIGN KEY (`project_fk`) REFERENCES `project` (`id`)
+    CONSTRAINT `project_fk_document` FOREIGN KEY (`project_fk`) REFERENCES `project` (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `event` (

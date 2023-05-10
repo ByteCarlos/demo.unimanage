@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `document` (
 CREATE TABLE IF NOT EXISTS `event` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `name` varchar(200) NOT NULL,
-    `data` date NOT NULL,
+    `date` date NOT NULL,
     `location` varchar(200) NOT NULL,
     `project_fk` int(11) NOT NULL,
     `updated_at` timestamp NULL,
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `instructor_team` (
 );
 
 INSERT INTO `project` (project_cod, name, description, delivery_date) VALUES('Código Teste', 'Nome Projeto Teste', 'Descrição Teste', '2023-04-05');
-INSERT INTO `event` (name, `data`, location, project_fk) VALUES('Evento Teste', '2023-05-06', 'Local Teste', 1);
+INSERT INTO `event` (name, `date`, location, project_fk) VALUES('Evento Teste', '2023-05-06', 'Local Teste', 1);
 INSERT INTO `institution` (name, address) VALUES('Instituição Teste', 'Local Teste');
 INSERT INTO `user` (email, username, password, `role`) VALUES('teste@email.com', 'teste123', '32132142', 'admin');
 INSERT INTO `instructor` (name, cpf, user_fk, institution_fk) VALUES('André', '31230928321', 1, 1);
@@ -147,7 +147,7 @@ INSERT INTO `team` (name, project_fk) VALUES('Time Teste', 1);
 INSERT INTO `instructor_team` (team_fk, instructor_fk) VALUES(1, 1);
 
 INSERT INTO `project` (project_cod, name, description, delivery_date) VALUES('Código Teste2', 'Nome Projeto Teste2', 'Descrição Teste2', '2023-04-05');
-INSERT INTO `event` (name, `data`, location, project_fk) VALUES('Evento Teste2', '2023-05-06', 'Local Teste2', 2);
+INSERT INTO `event` (name, `date`, location, project_fk) VALUES('Evento Teste2', '2023-05-06', 'Local Teste2', 2);
 INSERT INTO `institution` (name, address) VALUES('Instituição Teste2', 'Local Teste2');
 INSERT INTO `user` (email, username, password, `role`) VALUES('teste2@email.com', 'teste2123', '32132142', 'admin');
 INSERT INTO `instructor` (name, cpf, user_fk, institution_fk) VALUES('Adicineia', '31230928321', 2, 2);
@@ -156,7 +156,7 @@ INSERT INTO `team` (name, project_fk) VALUES('Time Teste2', 2);
 INSERT INTO `instructor_team` (team_fk, instructor_fk) VALUES(2, 2);
 
 INSERT INTO `project` (project_cod, name, description, delivery_date) VALUES('Código Teste3', 'Nome Projeto Teste3', 'Descrição Teste3', '2023-04-05');
-INSERT INTO `event` (name, `data`, location, project_fk) VALUES('Evento Teste3', '2023-05-06', 'Local Teste3', 3);
+INSERT INTO `event` (name, `date`, location, project_fk) VALUES('Evento Teste3', '2023-05-06', 'Local Teste3', 3);
 INSERT INTO `institution` (name, address) VALUES('Instituição Teste3', 'Local Teste3');
 INSERT INTO `user` (email, username, password, `role`) VALUES('teste3@email.com', 'teste3123', '32132142', 'admin');
 INSERT INTO `instructor` (name, cpf, user_fk, institution_fk) VALUES('Breno', '31230928321', 3, 3);

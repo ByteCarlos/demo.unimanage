@@ -25,4 +25,4 @@ Route::get('/tarefas', [SiteController::class, 'tasks'])->name('tarefas.index');
 Route::get('/tarefas/{id}/edit', [SiteController::class, 'editTask'])->name('tarefas.edit');
 Route::put('/tarefas/update/{id}', [SiteController::class, 'updateTask'])->name('tarefas.update');
 Route::delete('/tarefas/delete/{id}', [SiteController::class, 'deleteTask'])->name('tarefas.delete');
-Route::post('/tarefas', [SiteController::class, 'storeEvent']);
+Route::post('/tarefas', [SiteController::class, 'storeTask']);
